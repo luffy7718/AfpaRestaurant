@@ -30,29 +30,11 @@
             android:orientation="vertical"
             android:layout_weight="4">
 
-            <ImageButton
-                android:id="@+id/addQuantity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_up_arrow" />
+            <NumberPicker
+                android:id="@+id/npQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/txtQuantity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:inputType="number"
-                android:text="0"
-                android:textAlignment="center"
-                android:textSize="25sp" />
-
-            <ImageButton
-                android:id="@+id/removeQuantity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/ic_down_arrow" />
 
 
         </LinearLayout>

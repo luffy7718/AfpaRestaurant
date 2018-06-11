@@ -7,6 +7,7 @@ public class Meal {
     String description;
     int idMealCategory;
     int idStep;
+    int quantity = 0;
 
     public Meal() {
     }
@@ -49,5 +50,23 @@ public class Meal {
 
     public void setIdStep(int idStep) {
         this.idStep = idStep;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void addQuantity(){
+        this.quantity ++;
+    }
+
+    public void removeQuantity(){
+        if(this.quantity > 0) {
+            this.quantity--;
+        }
     }
 }

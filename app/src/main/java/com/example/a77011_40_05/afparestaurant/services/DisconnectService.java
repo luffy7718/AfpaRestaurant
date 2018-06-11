@@ -44,6 +44,7 @@ public class DisconnectService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         Log.i(TAG, "onTaskRemoved()");
         SWInterface swInterface = RetrofitApi.getInterface();
+
         Log.e(Constants._TAG_LOG,"Logout");
         Call<Push> call = swInterface.logout(Functions.getAuth(), Session.getMyUser().getIdStaff());
         call.enqueue(new Callback<Push>() {
@@ -53,7 +54,7 @@ public class DisconnectService extends Service {
                     Push push = response.body();
                     if (push.getStatus() == 1) {
                        Log.e(Constants._TAG_LOG,"FIN");
-                       stopSelf();
+                       //stopSelf();
                        //super.onTaskRemoved(rootIntent);
                     } else {
                         //Toast.makeText(context, push.getData(), Toast.LENGTH_LONG).show();

@@ -15,6 +15,8 @@ import com.example.a77011_40_05.afparestaurant.models.Meals;
 import com.example.a77011_40_05.afparestaurant.models.Step;
 import com.example.a77011_40_05.afparestaurant.models.Steps;
 
+import java.util.Collections;
+
 public class MealAdapter extends RecyclerView.Adapter<MealHolder> {
     Meals meals;
     Activity activity;

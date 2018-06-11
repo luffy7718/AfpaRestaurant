@@ -13,6 +13,6 @@ public class Constants {
 
 
     public static final String APP_NAME = "AfpaRestaurant";
-    public static final String _URL_WEBSERVICE =  "http://10.75.26.11:8080/afpa_restaurant/";
+    public static final String _URL_WEBSERVICE =  "http://10.75.25.69:8080/afpa_restaurant/";
     //public static final String _URL_WEBSERVICE =  "https://afpa-restaurant.000webhostapp.com";
 }

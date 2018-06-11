@@ -60,10 +60,20 @@ public class TableHolder extends RecyclerView.ViewHolder {
                 //Toast.makeText(activity,"Guests: "+guests.getText(),Toast.LENGTH_LONG).show();
                 HomeActivity home = (HomeActivity) activity;
                 Bundle args = new Bundle();
-                int nbGuests = Integer.parseInt(guests.getText().toString());
-                args.putInt("guests",nbGuests);
-                args.putInt("idTable",table.getIdTable());
-                home.changeFragment(Constants.FRAG_ORDER,args);
+                try{
+                    int nbGuests = Integer.parseInt(guests.getText().toString());
+                    if(nbGuests != 0){
+                        args.putInt("guests",nbGuests);
+                        args.putInt("idTable",table.getIdTable());
+                        home.changeFragment(Constants.FRAG_ORDER,args);
+                    }else{
+                        Toast.makeText(activity,"Au moins 1 convive nécéssaire.",Toast.LENGTH_LONG).show();
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(activity,"Erreur de saisie.",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }

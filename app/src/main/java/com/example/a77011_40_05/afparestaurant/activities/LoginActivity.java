@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.example.a77011_40_05.afparestaurant.R;
@@ -114,6 +115,8 @@ public class LoginActivity extends AppCompatActivity {
                     } else
                     {
                         Log.e(Constants._TAG_LOG,"push.getdata = "+push.getData());
+                        Toast.makeText(context,push.getData(),Toast.LENGTH_LONG).show();
+                        vswLogin.showPrevious();
 
                     }
                     //Toast.makeText(context, "name= " + push.getName(), Toast.LENGTH_LONG)
@@ -134,12 +137,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToHome() {
-        vswLogin.showPrevious();
         Intent serviceIntent = new Intent(this, DisconnectService.class);
         startService(serviceIntent);
         Intent intent = null;
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
+        vswLogin.showPrevious();
         finish();
     }
 }
