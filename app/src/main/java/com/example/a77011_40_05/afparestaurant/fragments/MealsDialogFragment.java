@@ -3,9 +3,9 @@ package com.example.a77011_40_05.afparestaurant.fragments;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,10 +13,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.example.a77011_40_05.afparestaurant.R;
+import com.example.a77011_40_05.afparestaurant.activities.HomeActivity;
 import com.example.a77011_40_05.afparestaurant.adapters.MealAdapter;
 import com.example.a77011_40_05.afparestaurant.models.Meal;
 import com.example.a77011_40_05.afparestaurant.models.Meals;
@@ -32,7 +34,9 @@ public class MealsDialogFragment extends DialogFragment {
     RecyclerView rvwMealsList;
     ViewSwitcher vwsMealSelector;
     Button btnNext, btnPrevious, btnValide;
+    LinearLayout lltResume;
     int idStep;
+    Meals meals;
 
     public MealsDialogFragment() {
         // Required empty public constructor
@@ -76,11 +80,12 @@ public class MealsDialogFragment extends DialogFragment {
         btnPrevious = view.findViewById(R.id.btnPrevious);
         btnNext = view.findViewById(R.id.btnNext);
         btnValide = view.findViewById(R.id.btnValide);
-
+        lltResume = view.findViewById(R.id.lltResume);
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                buildResume();
                 vwsMealSelector.showNext();
             }
         });
@@ -92,9 +97,20 @@ public class MealsDialogFragment extends DialogFragment {
             }
         });
 
+        btnValide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeActivity home = (HomeActivity) getActivity();
+                OrderFragment frag = (OrderFragment) home.getLastFragment();
+                frag.addOrders(idStep,meals);
+                dismiss();
+            }
+        });
+
         mealAdapter = new MealAdapter(getActivity());
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context,1);
-        rvwMealsList.setLayoutManager(layoutManager);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        rvwMealsList.setLayoutManager(llm);
         rvwMealsList.setAdapter(mealAdapter);
 
         getMeals();
@@ -145,5 +161,27 @@ public class MealsDialogFragment extends DialogFragment {
             }
         }
         return "Step";
+    }
+
+    private void buildResume(){
+        meals = new Meals();
+        lltResume.removeAllViews();
+        for(Meal meal: mealAdapter.getMeals()){
+            if(meal.getQuantity() > 0){
+                meals.add(meal);
+                LinearLayout llt = new LinearLayout(context);
+                llt.setOrientation(LinearLayout.HORIZONTAL);
+                llt.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+                TextView txtName = new TextView(context);
+                txtName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT,1));
+                txtName.setText(meal.getName());
+                TextView txtQuantity = new TextView(context);
+                txtQuantity.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT,3));
+                txtQuantity.setText(meal.getQuantity()+"");
+                llt.addView(txtName);
+                llt.addView(txtQuantity);
+                lltResume.addView(llt);
+            }
+        }
     }
 }

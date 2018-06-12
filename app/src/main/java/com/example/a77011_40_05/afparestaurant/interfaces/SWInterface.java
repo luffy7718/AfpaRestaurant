@@ -15,7 +15,7 @@ public interface SWInterface {
      * CALL
      ******************************************/
     @FormUrlEncoded
-    @POST("/afpa_restaurant/login.php")//forceLogin.php ou login.php
+    @POST("/afpa_restaurant/forceLogin.php")//forceLogin.php ou login.php
     Call<Push> login(
             @Header("Authorization") String authorization,
             @Field("login") String login,

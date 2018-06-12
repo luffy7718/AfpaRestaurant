@@ -38,10 +38,10 @@
             android:layout_weight="1">
 
             <LinearLayout
-                android:id="@+id/lltOrder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="#20A0">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rvwStepsList"
@@ -51,16 +51,23 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/lltBill"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="#200A">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rvwOrderList"
+
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent">
 
+                    <LinearLayout
+                        android:id="@+id/lltOrder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#2A00"/>
+                </ScrollView>
             </LinearLayout>
 
 
