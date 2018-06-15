@@ -3,21 +3,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="15dp"
+    android:padding="15dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txtOrderName"
+    <LinearLayout
+        android:id="@+id/lltHeaderOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:text="Step"/>
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/colorPrimaryDark"/>
+        <TextView
+            android:id="@+id/txtOrderName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#1000"
+            android:textSize="25sp"
+            android:textColor="#FFF"
+            android:text="Step"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:src="@drawable/ic_add_meal"/>
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvwOrderList"

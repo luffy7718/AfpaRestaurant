@@ -10,13 +10,8 @@ import android.widget.LinearLayout;
 
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.holders.MealHolder;
-import com.example.a77011_40_05.afparestaurant.holders.StepHolder;
 import com.example.a77011_40_05.afparestaurant.models.Meal;
 import com.example.a77011_40_05.afparestaurant.models.Meals;
-import com.example.a77011_40_05.afparestaurant.models.Step;
-import com.example.a77011_40_05.afparestaurant.models.Steps;
-
-import java.util.Collections;
 
 public class MealAdapter extends RecyclerView.Adapter<MealHolder> {
     Meals meals;
@@ -30,7 +25,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealHolder> {
     @NonNull
     @Override
     public MealHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        //parent.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 500));
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_meal,parent,false);
         return new MealHolder(view);
     }

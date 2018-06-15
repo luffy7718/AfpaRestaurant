@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a77011_40_05.afparestaurant.R;
+import com.example.a77011_40_05.afparestaurant.adapters.OrderAdapter;
 import com.example.a77011_40_05.afparestaurant.models.Meal;
 
 public class OrderHolder extends RecyclerView.ViewHolder {
@@ -25,7 +26,7 @@ public class OrderHolder extends RecyclerView.ViewHolder {
         btnRemove = view.findViewById(R.id.btnRemove);
     }
 
-    public void setMeal(Meal meal, Activity activity) {
+    public void setMeal(Meal meal, Activity activity, OrderAdapter parent) {
         this.meal = meal;
 
         txtName.setText(meal.getName());
@@ -33,7 +34,7 @@ public class OrderHolder extends RecyclerView.ViewHolder {
         btnRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                parent.remove(getAdapterPosition());
             }
         });
 

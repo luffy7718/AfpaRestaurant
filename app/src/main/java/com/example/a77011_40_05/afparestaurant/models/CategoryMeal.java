@@ -1,19 +1,19 @@
 package com.example.a77011_40_05.afparestaurant.models;
 
-public class Step {
-    int idStep;
+public class CategoryMeal {
+    int idCategoryMeal;
     String name;
     int number;
 
-    public Step() {
+    public CategoryMeal() {
     }
 
-    public int getIdStep() {
-        return idStep;
+    public int getIdCategoryMeal() {
+        return idCategoryMeal;
     }
 
-    public void setIdStep(int idStep) {
-        this.idStep = idStep;
+    public void setIdCategoryMeal(int idCategoryMeal) {
+        this.idCategoryMeal = idCategoryMeal;
     }
 
     public String getName() {

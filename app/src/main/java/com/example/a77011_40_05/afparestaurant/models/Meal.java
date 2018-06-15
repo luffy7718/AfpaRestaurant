@@ -5,8 +5,7 @@ public class Meal {
     int idMeal;
     String name;
     String description;
-    int idMealCategory;
-    int idStep;
+    int idCategoryMeal;
     int quantity = 0;
 
     public Meal() {
@@ -36,20 +35,12 @@ public class Meal {
         this.description = description;
     }
 
-    public int getIdMealCategory() {
-        return idMealCategory;
+    public int getIdCategoryMeal() {
+        return idCategoryMeal;
     }
 
-    public void setIdMealCategory(int idMealCategory) {
-        this.idMealCategory = idMealCategory;
-    }
-
-    public int getIdStep() {
-        return idStep;
-    }
-
-    public void setIdStep(int idStep) {
-        this.idStep = idStep;
+    public void setIdCategoryMeal(int idCategoryMeal) {
+        this.idCategoryMeal = idCategoryMeal;
     }
 
     public void setQuantity(int quantity) {

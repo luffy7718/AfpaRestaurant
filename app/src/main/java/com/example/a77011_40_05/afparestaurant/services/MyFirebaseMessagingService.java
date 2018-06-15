@@ -1,8 +1,5 @@
 package com.example.a77011_40_05.afparestaurant.services;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
 import android.util.Log;
 
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
@@ -19,11 +16,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(Constants._TAG_LOG, "From: " + remoteMessage.getFrom());
+        Log.d(Constants.TAG_LOG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d(Constants._TAG_LOG, "Message data payload: " + remoteMessage.getData());
+            Log.d(Constants.TAG_LOG, "Message data payload: " + remoteMessage.getData());
 
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
@@ -37,7 +34,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.d(Constants._TAG_LOG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Log.d(Constants.TAG_LOG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM

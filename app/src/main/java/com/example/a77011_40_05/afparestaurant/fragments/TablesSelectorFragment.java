@@ -17,8 +17,6 @@ import com.example.a77011_40_05.afparestaurant.adapters.TableAdapter;
 import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
 import com.example.a77011_40_05.afparestaurant.models.Push;
 import com.example.a77011_40_05.afparestaurant.models.Tables;
-import com.example.a77011_40_05.afparestaurant.models.Users;
-import com.example.a77011_40_05.afparestaurant.utils.App;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
 import com.example.a77011_40_05.afparestaurant.utils.Functions;
 import com.example.a77011_40_05.afparestaurant.utils.RetrofitApi;
@@ -79,16 +77,16 @@ public class TablesSelectorFragment extends Fragment {
             public void onResponse(Call<Push> call, Response<Push> response) {
 
                 if (response.isSuccessful()) {
-                    Log.e(Constants._TAG_LOG, response.body().toString());
+                    Log.e(Constants.TAG_LOG, response.body().toString());
                     Push push = response.body();
                     if(push.getStatus()==1) {
                         Gson gson = new Gson();
                         Tables tables = gson.fromJson(push.getData(),Tables.class);
                         tableAdapter.loadTables(tables);
-                        Log.e(Constants._TAG_LOG,"DATA RECIEVE");
+                        Log.e(Constants.TAG_LOG,"DATA RECIEVE");
                     }
                 } else {
-                    Log.e(Constants._TAG_LOG,"Erreur : getStaff " + response.toString());
+                    Log.e(Constants.TAG_LOG,"Erreur : getStaff " + response.toString());
                 }
             }
 

@@ -4,10 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.a77011_40_05.afparestaurant.activities.HomeActivity;
-import com.example.a77011_40_05.afparestaurant.activities.LoginActivity;
 import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
 import com.example.a77011_40_05.afparestaurant.models.Push;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
@@ -21,7 +18,7 @@ import retrofit2.Response;
 
 public class DisconnectService extends Service {
 
-    private static final String TAG = Constants._TAG_LOG+" Service";
+    private static final String TAG = Constants.TAG_LOG +" Service";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -45,7 +42,7 @@ public class DisconnectService extends Service {
         Log.i(TAG, "onTaskRemoved()");
         SWInterface swInterface = RetrofitApi.getInterface();
 
-        Log.e(Constants._TAG_LOG,"Logout");
+        Log.e(Constants.TAG_LOG,"Logout");
         Call<Push> call = swInterface.logout(Functions.getAuth(), Session.getMyUser().getIdStaff());
         call.enqueue(new Callback<Push>() {
             @Override
@@ -53,14 +50,14 @@ public class DisconnectService extends Service {
                 if (response.isSuccessful()) {
                     Push push = response.body();
                     if (push.getStatus() == 1) {
-                       Log.e(Constants._TAG_LOG,"FIN");
+                       Log.e(Constants.TAG_LOG,"FIN");
                        //stopSelf();
                        //super.onTaskRemoved(rootIntent);
                     } else {
                         //Toast.makeText(context, push.getData(), Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Log.e(Constants._TAG_LOG, response.toString());
+                    Log.e(Constants.TAG_LOG, response.toString());
                 }
             }
 

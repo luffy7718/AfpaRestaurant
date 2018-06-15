@@ -23,11 +23,15 @@ import android.widget.TextView;
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.fragments.HomeFragment;
 import com.example.a77011_40_05.afparestaurant.fragments.MealsDialogFragment;
+import com.example.a77011_40_05.afparestaurant.fragments.Order2Fragment;
+import com.example.a77011_40_05.afparestaurant.fragments.Order3Fragment;
 import com.example.a77011_40_05.afparestaurant.fragments.OrderFragment;
+import com.example.a77011_40_05.afparestaurant.fragments.SettingsFragment;
 import com.example.a77011_40_05.afparestaurant.fragments.TablesSelectorFragment;
 import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
 import com.example.a77011_40_05.afparestaurant.models.User;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
+import com.example.a77011_40_05.afparestaurant.utils.Functions;
 import com.example.a77011_40_05.afparestaurant.utils.RetrofitApi;
 import com.example.a77011_40_05.afparestaurant.utils.Session;
 
@@ -46,12 +50,16 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         context = this;
         swInterface = RetrofitApi.getInterface();
         context = this;
+
+        if(Functions.getPreferenceString(this,"commandMode").equals("")){
+            Functions.addPreferenceString(this,"commandMode","Menu et Commandes");
+        }
 
         fragmentManager = getFragmentManager();
         changeFragment(Constants.FRAG_TABLES_SELECTOR, null);
@@ -64,7 +72,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });*/
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string
                 .navigation_drawer_close);
@@ -105,6 +113,7 @@ public class HomeActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            changeFragment(Constants.FRAG_SETTINGS,null);
             return true;
         }
 
@@ -139,10 +148,10 @@ public class HomeActivity extends AppCompatActivity
     private void clearFragments() {
         int end = fragmentManager.getBackStackEntryCount();
         for (int i = 0; i <= end; i++) {
-            //Log.e(Constants._TAG_LOG,i+"/"+end);
+            //Log.e(Constants.TAG_LOG,i+"/"+end);
             fragmentManager.popBackStackImmediate();
         }
-        //Log.e(Constants._TAG_LOG,"Finish "+fragmentManager.getBackStackEntryCount());
+        //Log.e(Constants.TAG_LOG,"Finish "+fragmentManager.getBackStackEntryCount());
     }
 
     public void changeFragment(int code, Bundle params) {
@@ -156,6 +165,15 @@ public class HomeActivity extends AppCompatActivity
                 break;
             case Constants.FRAG_ORDER:
                 frag = OrderFragment.newInstance(params);
+                break;
+            case Constants.FRAG_ORDER2:
+                frag = Order2Fragment.newInstance(params);
+                break;
+            case Constants.FRAG_ORDER3:
+                frag = Order3Fragment.newInstance(params);
+                break;
+            case Constants.FRAG_SETTINGS:
+                frag = new SettingsFragment();
                 break;
             default:
                 Log.e("[ERROR]", "changeFragment: code invalide " + code);
@@ -182,7 +200,6 @@ public class HomeActivity extends AppCompatActivity
     public void showMealsDialog(int idStep){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         MealsDialogFragment mealsDialogFragment = MealsDialogFragment.newInstance(idStep);
-        //detailDialog.setDetailRoom(room, roomStatut, staff);
         mealsDialogFragment.show(ft, "TAG detail");
     }
 

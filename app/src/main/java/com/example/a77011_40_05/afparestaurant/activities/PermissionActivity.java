@@ -46,6 +46,7 @@ public class PermissionActivity extends AppCompatActivity {
         permissionRequest = new ArrayList<>();
 
         permissions.add(Manifest.permission.ACCESS_NETWORK_STATE);
+        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         
         callPermission();
     }

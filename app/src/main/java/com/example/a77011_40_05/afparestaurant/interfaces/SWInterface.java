@@ -59,13 +59,8 @@ public interface SWInterface {
             @Header("Authorization") String authorization
     );
 
-    @POST("getMealcategories.php")
-    Observable<Push> getMealcategories(
-            @Header("Authorization") String authorization
-    );
-
-    @POST("getSteps.php")
-    Observable<Push> getSteps(
+    @POST("getCategoriesMeals.php")
+    Observable<Push> getCategoriesMeals(
             @Header("Authorization") String authorization
     );
 }

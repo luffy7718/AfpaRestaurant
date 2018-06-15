@@ -24,7 +24,7 @@ public class RetrofitApi {
     private static void getInstance() {
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants._URL_WEBSERVICE)
+                .baseUrl(Constants.URL_WEBSERVICE)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();

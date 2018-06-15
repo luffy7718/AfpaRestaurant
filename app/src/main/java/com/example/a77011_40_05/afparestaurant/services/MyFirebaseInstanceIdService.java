@@ -1,8 +1,5 @@
 package com.example.a77011_40_05.afparestaurant.services;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
 import android.util.Log;
 
 import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
@@ -26,7 +23,7 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(Constants._TAG_LOG, "Refreshed token: " + refreshedToken);
+        Log.d(Constants.TAG_LOG, "Refreshed token: " + refreshedToken);
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
@@ -50,18 +47,18 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
                         if(push.getStatus() == 1){
                             String newId = push.getData();
                             Functions.addPreferenceString(getApplicationContext(),"idDevice",newId);
-                            Log.d(Constants._TAG_LOG,"New idDevice: "+newId);
+                            Log.d(Constants.TAG_LOG,"New idDevice: "+newId);
                         }else{
-                            Log.e(Constants._TAG_LOG,"Error: addDevice.ph | "+push.getData());
+                            Log.e(Constants.TAG_LOG,"Error: addDevice.ph | "+push.getData());
                         }
                     }else{
-                        Log.e(Constants._TAG_LOG,"Error: "+response.toString());
+                        Log.e(Constants.TAG_LOG,"Error: "+response.toString());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Push> call, Throwable t) {
-                    Log.e(Constants._TAG_LOG,"Error: "+t.getMessage());
+                    Log.e(Constants.TAG_LOG,"Error: "+t.getMessage());
                 }
             });
         }else{
@@ -72,18 +69,18 @@ public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
                     if(response.isSuccessful()){
                         Push push = response.body();
                         if(push.getStatus() == 1){
-                            Log.d(Constants._TAG_LOG,"Token add to DB: "+refreshedToken);
+                            Log.d(Constants.TAG_LOG,"Token add to DB: "+refreshedToken);
                         }else{
-                            Log.e(Constants._TAG_LOG,"Error: addDevice.ph | "+push.getData());
+                            Log.e(Constants.TAG_LOG,"Error: addDevice.ph | "+push.getData());
                         }
                     }else{
-                        Log.e(Constants._TAG_LOG,"Error: "+response.toString());
+                        Log.e(Constants.TAG_LOG,"Error: "+response.toString());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Push> call, Throwable t) {
-                    Log.e(Constants._TAG_LOG,"Error: "+t.getMessage());
+                    Log.e(Constants.TAG_LOG,"Error: "+t.getMessage());
                 }
             });
         }

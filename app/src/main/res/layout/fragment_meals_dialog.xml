@@ -19,13 +19,11 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvwMealsList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_height="420dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="8"
                 android:orientation="horizontal">
 
                 <View

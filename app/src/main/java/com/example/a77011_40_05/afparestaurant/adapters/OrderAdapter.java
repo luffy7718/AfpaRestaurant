@@ -32,7 +32,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderHolder> {
     @Override
     public void onBindViewHolder(@NonNull OrderHolder holder, int position) {
         Meal meal = meals.get(position);
-        holder.setMeal(meal,activity);
+        holder.setMeal(meal,activity,this);
     }
 
     @Override
@@ -50,6 +50,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderHolder> {
 
     public  void loadMeals(Meals meals) {
         this.meals = meals;
+        notifyDataSetChanged();
+    }
+
+    public void remove(int position){
+        meals.remove(position);
         notifyDataSetChanged();
     }
 }

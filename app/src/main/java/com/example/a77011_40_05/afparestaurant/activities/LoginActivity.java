@@ -89,14 +89,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void callLogin(String login, String password) {
-        Log.e(Constants._TAG_LOG,"Login ...");
+        Log.e(Constants.TAG_LOG,"Login ...");
         Call<Push> call = swInterface.login(Functions.getAuth(), login, password,Functions.getMyIdDevice(context));
 
         call.enqueue(new Callback<Push>() {
             @Override
             public void onResponse(Call<Push> call, Response<Push> response) {
                 if (response.isSuccessful()) {
-                    Log.e(Constants._TAG_LOG, response.toString());
+                    Log.e(Constants.TAG_LOG, response.toString());
                     Push push = response.body();
                     if(push.getStatus()==1) {
                         Gson gson = new Gson();
@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                         goToHome();
                         //setResult(Constants._CODE_LOGIN, intent);
 
-                        Log.e(Constants._TAG_LOG, "User " + user.getFirstname());
+                        Log.e(Constants.TAG_LOG, "User " + user.getFirstname());
 
                         //textView.setText(push.getName());
                         Log.e("TAG ", "[status:" + push.getStatus() + ", type:" + push.getType()
@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                                 + "]");
                     } else
                     {
-                        Log.e(Constants._TAG_LOG,"push.getdata = "+push.getData());
+                        Log.e(Constants.TAG_LOG,"push.getdata = "+push.getData());
                         Toast.makeText(context,push.getData(),Toast.LENGTH_LONG).show();
                         vswLogin.showPrevious();
 
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                     // .show();
                 } else {
                     //todo:gérer les code erreur de retour
-                    Log.e(Constants._TAG_LOG, response.toString());
+                    Log.e(Constants.TAG_LOG, response.toString());
                 }
 
             }

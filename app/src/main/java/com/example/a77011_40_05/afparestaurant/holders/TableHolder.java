@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.activities.HomeActivity;
 import com.example.a77011_40_05.afparestaurant.models.Table;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
+import com.example.a77011_40_05.afparestaurant.utils.Functions;
 import com.example.a77011_40_05.afparestaurant.utils.GenericAlertDialog;
 
 public class TableHolder extends RecyclerView.ViewHolder {
@@ -65,7 +67,23 @@ public class TableHolder extends RecyclerView.ViewHolder {
                     if(nbGuests != 0){
                         args.putInt("guests",nbGuests);
                         args.putInt("idTable",table.getIdTable());
-                        home.changeFragment(Constants.FRAG_ORDER,args);
+                        String mode = Functions.getPreferenceString(activity,"commandMode");
+                        switch (mode){
+                            case "Menu et Commandes":
+                                home.changeFragment(Constants.FRAG_ORDER,args);
+                                break;
+                            case "Liste papier":
+                                home.changeFragment(Constants.FRAG_ORDER2,args);
+                                break;
+                            case "Claude":
+                                home.changeFragment(Constants.FRAG_ORDER3,args);
+                                break;
+                            default:
+                                Log.e(Constants.TAG_LOG, "WARNING: Default case");
+                                home.changeFragment(Constants.FRAG_ORDER,args);
+                                break;
+                        }
+
                     }else{
                         Toast.makeText(activity,"Au moins 1 convive nécéssaire.",Toast.LENGTH_LONG).show();
                     }

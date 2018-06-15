@@ -11,11 +11,9 @@ import android.widget.Toast;
 
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
-import com.example.a77011_40_05.afparestaurant.models.Meal;
-import com.example.a77011_40_05.afparestaurant.models.MealCategories;
+import com.example.a77011_40_05.afparestaurant.models.CategoriesMeals;
 import com.example.a77011_40_05.afparestaurant.models.Meals;
 import com.example.a77011_40_05.afparestaurant.models.Push;
-import com.example.a77011_40_05.afparestaurant.models.Steps;
 import com.example.a77011_40_05.afparestaurant.utils.App;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
 import com.example.a77011_40_05.afparestaurant.utils.Functions;
@@ -31,8 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     SWInterface swInterface;
     Meals meals;
-    MealCategories mealCategories;
-    Steps steps;
+    CategoriesMeals categoriesMeals;
 
 
     @Override
@@ -58,17 +55,14 @@ public class MainActivity extends AppCompatActivity {
     @SuppressWarnings("unchecked")
     @SuppressLint("CheckResult")
     private void getDataFromDB() {//DB:Data Base
-        Log.e(Constants._TAG_LOG, "getDataFromDB");
+        Log.e(Constants.TAG_LOG, "getDataFromDB");
         Observable.just(swInterface).subscribeOn(Schedulers.computation())
                 .flatMap(s -> {
                     Observable<Push> stepsObservable
-                            = s.getSteps(Functions.getAuth()).subscribeOn(Schedulers.io());
-                    Observable<Push> mealCategoriesObservable
-                            = s.getMealcategories(Functions.getAuth()).subscribeOn(Schedulers.io());
+                            = s.getCategoriesMeals(Functions.getAuth()).subscribeOn(Schedulers.io());
                     Observable<Push> mealsObservable
                             = s.getMeals(Functions.getAuth()).subscribeOn(Schedulers.io());
-                    return Observable.concatArray(stepsObservable, mealCategoriesObservable,
-                            mealsObservable);
+                    return Observable.concatArray(stepsObservable, mealsObservable);
                 }).observeOn(AndroidSchedulers.mainThread()).subscribe(this::handleResults,
                 this::handleError);
 
@@ -77,29 +71,22 @@ public class MainActivity extends AppCompatActivity {
     private void handleResults(Object object) {
         if (object instanceof Push) {
             Push push = (Push) object;
-            Log.e(Constants._TAG_LOG, push.toString());
+            Log.e(Constants.TAG_LOG, push.toString());
             Gson gson=new Gson();
 
             switch (push.getType()) {
-                case "steps":
-                    steps = gson.fromJson(push.getData(), Steps.class);
-                    App.setSteps(steps);
-                    //Functions.addPreferenceString(this, "jobsTable", push.getData());
-                    break;
-                case "meal_categories":
-                    mealCategories = gson.fromJson(push.getData(), MealCategories.class);
-                    App.setMealCategories(mealCategories);
-                    //Functions.addPreferenceString(this, "roomsStatusTable", push.getData());
+                case "categories_meals":
+                    categoriesMeals = gson.fromJson(push.getData(), CategoriesMeals.class);
+                    App.setCategoriesMeals(categoriesMeals);
                     break;
                 case "meals":
                     meals = gson.fromJson(push.getData(), Meals.class);
                     App.setMeals(meals);
-                    //Functions.addPreferenceString(this, "floorsTable", push.getData());
                     break;
             }
-            Log.e(Constants._TAG_LOG,"Steps:"+String.valueOf(steps!=null)+" | MealCategories:"+String.valueOf(mealCategories!=null)+" | Meals:"+String.valueOf(meals!=null));
-            if(steps != null && mealCategories !=null && meals!=null) {
-                Log.e(Constants._TAG_LOG,"APP loaded");
+            Log.e(Constants.TAG_LOG,"CategoriesMeals:"+String.valueOf(categoriesMeals !=null)+" | Meals:"+String.valueOf(meals!=null));
+            if(categoriesMeals != null && meals!=null) {
+                Log.e(Constants.TAG_LOG,"APP loaded");
                 goToLogin();
             }
         }

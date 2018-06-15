@@ -40,8 +40,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="#20A0">
+                android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rvwStepsList"
@@ -53,8 +52,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="#200A">
+                android:orientation="vertical">
 
 
                 <ScrollView
@@ -65,8 +63,7 @@
                         android:id="@+id/lltOrder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:background="#2A00"/>
+                        android:orientation="vertical"/>
                 </ScrollView>
             </LinearLayout>
 
