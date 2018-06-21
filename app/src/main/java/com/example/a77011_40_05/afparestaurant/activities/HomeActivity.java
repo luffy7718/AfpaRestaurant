@@ -1,9 +1,12 @@
 package com.example.a77011_40_05.afparestaurant.activities;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.fragments.HomeFragment;
@@ -29,11 +33,16 @@ import com.example.a77011_40_05.afparestaurant.fragments.OrderFragment;
 import com.example.a77011_40_05.afparestaurant.fragments.SettingsFragment;
 import com.example.a77011_40_05.afparestaurant.fragments.TablesSelectorFragment;
 import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
+import com.example.a77011_40_05.afparestaurant.models.Push;
 import com.example.a77011_40_05.afparestaurant.models.User;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
 import com.example.a77011_40_05.afparestaurant.utils.Functions;
 import com.example.a77011_40_05.afparestaurant.utils.RetrofitApi;
 import com.example.a77011_40_05.afparestaurant.utils.Session;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,10 +64,9 @@ public class HomeActivity extends AppCompatActivity
 
         context = this;
         swInterface = RetrofitApi.getInterface();
-        context = this;
 
-        if(Functions.getPreferenceString(this,"commandMode").equals("")){
-            Functions.addPreferenceString(this,"commandMode","Menu et Commandes");
+        if (Functions.getPreferenceString(this, "commandMode").equals("")) {
+            Functions.addPreferenceString(this, "commandMode", "Menu et Commandes");
         }
 
         fragmentManager = getFragmentManager();
@@ -94,6 +102,10 @@ public class HomeActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            int backStackCount = fragmentManager.getBackStackEntryCount();
+            if (backStackCount == 0) {
+                showDisconnectAppliDialog();
+            }
         }
     }
 
@@ -113,8 +125,10 @@ public class HomeActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            changeFragment(Constants.FRAG_SETTINGS,null);
+            changeFragment(Constants.FRAG_SETTINGS, null);
             return true;
+        } else if (id == R.id.action_login) {
+            showDisconnectDialog();
         }
 
         return super.onOptionsItemSelected(item);
@@ -126,18 +140,11 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_home) {
+            clearFragments();
+            changeFragment(Constants.FRAG_HOME, null);
+        }else if (id == R.id.nav_order) {
+            changeFragment(Constants.FRAG_ORDER, null);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -155,10 +162,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void changeFragment(int code, Bundle params) {
-        Fragment frag = null;
+        Fragment frag = getLastFragment();
         switch (code) {
             case Constants.FRAG_HOME:
-                frag = new HomeFragment();
+                frag = new TablesSelectorFragment();
                 break;
             case Constants.FRAG_TABLES_SELECTOR:
                 frag = new TablesSelectorFragment();
@@ -197,9 +204,35 @@ public class HomeActivity extends AppCompatActivity
                 .commit();
     }
 
-    public void showMealsDialog(int idStep){
+    public void showMealsDialog(int idCategoryMeal) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        MealsDialogFragment mealsDialogFragment = MealsDialogFragment.newInstance(idStep);
+        Fragment frag = getLastFragment();
+        String mode = Functions.getPreferenceString(this, "commandMode");
+        int guests = 0;
+        switch (mode) {
+            case "Menu et Commandes":
+                OrderFragment order = (OrderFragment) frag;
+                guests = order.getGuests();
+                break;
+            case "Liste papier":
+                Order2Fragment order2 = (Order2Fragment) frag;
+                guests = order2.getGuests();
+                break;
+            case "Claude":
+                Order3Fragment order3 = (Order3Fragment) frag;
+                guests = order3.getGuests();
+                break;
+            default:
+                Log.e(Constants.TAG_LOG, "WARNING: Default case");
+                OrderFragment orderDefault = (OrderFragment) frag;
+                guests = orderDefault.getGuests();
+                break;
+        }
+        Bundle bundle = new Bundle();
+        bundle.putInt("idCategoryMeal", idCategoryMeal);
+        bundle.putInt("guests", guests);
+
+        MealsDialogFragment mealsDialogFragment = MealsDialogFragment.newInstance(bundle);
         mealsDialogFragment.show(ft, "TAG detail");
     }
 
@@ -209,5 +242,75 @@ public class HomeActivity extends AppCompatActivity
 
     public Fragment getLastFragment() {
         return currentFragment;
+    }
+
+    private void showDisconnectAppliDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Quitter l'application ?");
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "non", new DialogInterface
+                .OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                changeFragment(Constants.FRAG_HOME, null);
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Oui", new DialogInterface
+                .OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                logout();
+                System.exit(0);
+
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void showDisconnectDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle("Déconnexion de votre compte ?");
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "non", new DialogInterface
+                .OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Oui", new DialogInterface
+                .OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                logout();
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void logout() {
+        Call<Push> call = swInterface.logout(Functions.getAuth(), Session.getMyUser().getIdStaff());
+        call.enqueue(new Callback<Push>() {
+            @Override
+            public void onResponse(Call<Push> call, Response<Push> response) {
+                if (response.isSuccessful()) {
+                    Push push = response.body();
+                    if (push.getStatus() == 1) {
+                        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(context, push.getData(), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Log.e(Constants.TAG_LOG, response.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Push> call, Throwable t) {
+
+            }
+        });
     }
 }

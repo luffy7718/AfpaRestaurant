@@ -22,10 +22,13 @@ import android.widget.ViewSwitcher;
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.activities.HomeActivity;
 import com.example.a77011_40_05.afparestaurant.adapters.MealAdapter;
+import com.example.a77011_40_05.afparestaurant.adapters.OrderAdapter;
 import com.example.a77011_40_05.afparestaurant.models.Meal;
 import com.example.a77011_40_05.afparestaurant.models.Meals;
 import com.example.a77011_40_05.afparestaurant.models.CategoryMeal;
 import com.example.a77011_40_05.afparestaurant.models.CategoriesMeals;
+import com.example.a77011_40_05.afparestaurant.models.Table;
+import com.example.a77011_40_05.afparestaurant.models.Tables;
 import com.example.a77011_40_05.afparestaurant.utils.App;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
 import com.example.a77011_40_05.afparestaurant.utils.Functions;
@@ -40,33 +43,51 @@ public class MealsDialogFragment extends DialogFragment {
     LinearLayout lltResume;
     int idCategoryMeal;
     Meals meals;
+    TextView txtNbMeal;
+    TextView txtNbGuest;
+    public int guests;
+    int idTable;
+    OrderAdapter orderAdapter;
 
     public MealsDialogFragment() {
         // Required empty public constructor
     }
 
-    public static MealsDialogFragment newInstance(int idStep) {
+    public static MealsDialogFragment newInstance(Bundle args) {
         MealsDialogFragment fragment = new MealsDialogFragment();
-        Bundle args = new Bundle();
-        args.putInt("idCategoryMeal",idStep);
+
+        //args.putInt("idCategoryMeal", idStep);
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 
-            if(getArguments().containsKey("idCategoryMeal")){
+            if (getArguments().containsKey("idCategoryMeal")) {
                 idCategoryMeal = getArguments().getInt("idCategoryMeal");
-            }else{
-                Log.e(Constants.TAG_LOG,"ERROR: Pas de idCategoryMeal");
+            } else {
+                Log.e(Constants.TAG_LOG, "ERROR: Pas de idCategoryMeal");
             }
 
-            if(idCategoryMeal != 0 ){
-                Log.e(Constants.TAG_LOG,"CategoriesMeals: "+ idCategoryMeal);
+            if (idCategoryMeal != 0) {
+                Log.e(Constants.TAG_LOG, "CategoriesMeals: " + idCategoryMeal);
             }
+
+            if (getArguments().containsKey("guests")) {
+                guests = getArguments().getInt("guests");
+            } else {
+                Log.e(Constants.TAG_LOG, "ERROR: Pas de convives");
+            }
+
+
+            if (guests != 0) {
+                Log.e(Constants.TAG_LOG, "Table: " + idTable + " pour " + guests + " personnes");
+            }
+
         }
         context = getActivity();
     }
@@ -76,7 +97,7 @@ public class MealsDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         getDialog().setTitle(getStepName());
-        addButtonToDialogTitle(getDialog(),context);
+        addButtonToDialogTitle(getDialog(), context);
         View view = inflater.inflate(R.layout.fragment_meals_dialog, container, false);
         rvwMealsList = view.findViewById(R.id.rvwMealsList);
         vwsMealSelector = view.findViewById(R.id.vwsMealSelector);
@@ -84,7 +105,10 @@ public class MealsDialogFragment extends DialogFragment {
         btnNext = view.findViewById(R.id.btnNext);
         btnValide = view.findViewById(R.id.btnValide);
         lltResume = view.findViewById(R.id.lltResume);
-
+        txtNbMeal = view.findViewById(R.id.txtNbMeal);
+        txtNbGuest = view.findViewById(R.id.txtNbGuest);
+        txtNbMeal.setText("" + "/");
+        txtNbGuest.setText("" + guests);
         btnNext.setOnClickListener(v -> {
             buildResume();
             vwsMealSelector.showNext();
@@ -94,25 +118,26 @@ public class MealsDialogFragment extends DialogFragment {
 
         btnValide.setOnClickListener(v -> {
             HomeActivity home = (HomeActivity) getActivity();
-            String mode = Functions.getPreferenceString(context,"commandMode");
+            String mode = Functions.getPreferenceString(context, "commandMode");
 
-            switch (mode){
+            switch (mode) {
                 case "Menu et Commandes":
                     OrderFragment frag = (OrderFragment) home.getLastFragment();
-                    frag.addOrders(idCategoryMeal,meals);
+                    frag.addOrders(idCategoryMeal, meals);
+                    frag.showOrdres();
                     break;
                 case "Liste papier":
                     Order2Fragment frag2 = (Order2Fragment) home.getLastFragment();
-                    frag2.addOrders(idCategoryMeal,meals);
+                    frag2.addOrders(idCategoryMeal, meals);
                     break;
                 case "Claude":
                     Order3Fragment frag3 = (Order3Fragment) home.getLastFragment();
-                    frag3.addOrders(idCategoryMeal,meals);
+                    frag3.addOrders(idCategoryMeal, meals);
                     break;
                 default:
                     Log.e(Constants.TAG_LOG, "WARNING: Default case");
                     OrderFragment fragDefault = (OrderFragment) home.getLastFragment();
-                    fragDefault.addOrders(idCategoryMeal,meals);
+                    fragDefault.addOrders(idCategoryMeal, meals);
                     break;
             }
             getDialog().dismiss();
@@ -125,15 +150,17 @@ public class MealsDialogFragment extends DialogFragment {
         rvwMealsList.setAdapter(mealAdapter);
 
         getMeals();
+        orderAdapter = new OrderAdapter(getActivity());
+
         return view;
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    public static void addButtonToDialogTitle(final Dialog mdialog,Context context) {
+    public static void addButtonToDialogTitle(final Dialog mdialog, Context context) {
         final TextView title = mdialog.findViewById(android.R.id.title);
         title.setTextColor(context.getResources().getColor(R.color.textColor));
         title.setBackgroundColor(context.getResources().getColor(R.color.colorPrimary));
-        title.setPadding(60,30,20,30);
+        title.setPadding(60, 30, 20, 30);
 
         title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_delete_white, 0);
         title.setOnTouchListener((view, event) -> {
@@ -147,23 +174,23 @@ public class MealsDialogFragment extends DialogFragment {
         });
     }
 
-    private void getMeals(){
-        Log.e(Constants.TAG_LOG,"getMeals for "+idCategoryMeal);
+    private void getMeals() {
+        Log.e(Constants.TAG_LOG, "getMeals for " + idCategoryMeal);
         Meals meals = App.getMeals();
         Meals newList = new Meals();
-        for(Meal meal: meals){
-            if(meal.getIdCategoryMeal() == idCategoryMeal){
-                Log.e(Constants.TAG_LOG,"Plat: "+meal.getName());
+        for (Meal meal : meals) {
+            if (meal.getIdCategoryMeal() == idCategoryMeal) {
+                Log.e(Constants.TAG_LOG, "Plat: " + meal.getName());
                 newList.add(meal);
             }
         }
         mealAdapter.loadMeals(newList);
     }
 
-    private String getStepName(){
+    private String getStepName() {
         CategoriesMeals categoriesMeals = App.getCategoriesMeals();
-        for(CategoryMeal categoryMeal : categoriesMeals){
-            if(categoryMeal.getIdCategoryMeal() == idCategoryMeal){
+        for (CategoryMeal categoryMeal : categoriesMeals) {
+            if (categoryMeal.getIdCategoryMeal() == idCategoryMeal) {
                 return categoryMeal.getName();
             }
         }
@@ -171,21 +198,24 @@ public class MealsDialogFragment extends DialogFragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void buildResume(){
+    private void buildResume() {
         meals = new Meals();
         lltResume.removeAllViews();
-        for(Meal meal: mealAdapter.getMeals()){
-            if(meal.getQuantity() > 0){
+        for (Meal meal : mealAdapter.getMeals()) {
+            if (meal.getQuantity() > 0) {
                 meals.add(meal);
                 LinearLayout llt = new LinearLayout(context);
                 llt.setOrientation(LinearLayout.HORIZONTAL);
-                llt.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+                llt.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams
+                        .MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 TextView txtName = new TextView(context);
-                txtName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT,1));
+                txtName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams
+                        .MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
                 txtName.setText(meal.getName());
                 TextView txtQuantity = new TextView(context);
-                txtQuantity.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT,3));
-                txtQuantity.setText(meal.getQuantity()+"");
+                txtQuantity.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout
+                        .LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 3));
+                txtQuantity.setText(meal.getQuantity() + "");
                 llt.addView(txtName);
                 llt.addView(txtQuantity);
                 lltResume.addView(llt);

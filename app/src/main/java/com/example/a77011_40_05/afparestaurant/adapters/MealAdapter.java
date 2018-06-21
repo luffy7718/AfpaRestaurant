@@ -33,7 +33,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealHolder> {
     @Override
     public void onBindViewHolder(@NonNull MealHolder holder, int position) {
         Meal meal = meals.get(position);
-        holder.setMeal(meal,activity);
+        holder.setMeal(meal,this);
     }
 
     @Override

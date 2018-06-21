@@ -12,11 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.example.a77011_40_05.afparestaurant.R;
+import com.example.a77011_40_05.afparestaurant.activities.HomeActivity;
 import com.example.a77011_40_05.afparestaurant.adapters.OrderAdapter;
 import com.example.a77011_40_05.afparestaurant.adapters.CategoryMealAdapter;
 import com.example.a77011_40_05.afparestaurant.models.CategoriesMeals;
@@ -32,20 +35,23 @@ public class OrderFragment extends Fragment {
 
     Context context;
     int idTable;
-    int guests;
+    public int guests;
     CategoryMealAdapter categoryMealAdapter;
     boolean isFirstPage = true;
-
-    HashMap<Integer,Meals> orders;
-
+    OrderAdapter orderAdapter;
+    HashMap<Integer, Meals> orders;
+     CategoriesMeals categoriesMeals;
     //ELEMENTS
     Button btnOrders;
     Button btnBill;
     ViewSwitcher vwsOrder;
     RecyclerView rvwStepsList;
     LinearLayout lltOrder;
-
-
+    RecyclerView rvwOrderList;
+    TextView txtOrderName;
+    ImageView imgAddMeal;
+    TextView txtNbGuest;
+    TextView txtNbMeal;
     public OrderFragment() {
         // Required empty public constructor
     }
@@ -59,22 +65,22 @@ public class OrderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Commandes");
+        getActivity().setTitle("Commande");
         if (getArguments() != null) {
-            if(getArguments().containsKey("guests")){
+            if (getArguments().containsKey("guests")) {
                 guests = getArguments().getInt("guests");
-            }else{
-                Log.e(Constants.TAG_LOG,"ERROR: Pas de convives");
+            } else {
+                Log.e(Constants.TAG_LOG, "ERROR: Pas de convives");
             }
 
-            if(getArguments().containsKey("idTable")){
+            if (getArguments().containsKey("idTable")) {
                 idTable = getArguments().getInt("idTable");
-            }else{
-                Log.e(Constants.TAG_LOG,"ERROR: Pas d'idTable");
+            } else {
+                Log.e(Constants.TAG_LOG, "ERROR: Pas d'idTable");
             }
 
-            if(guests != 0 && idTable != 0){
-                Log.e(Constants.TAG_LOG,"Table: "+idTable+" pour "+guests+" personnes");
+            if (guests != 0 && idTable != 0) {
+                Log.e(Constants.TAG_LOG, "Table: " + idTable + " pour " + guests + " personnes");
             }
         }
 
@@ -95,24 +101,24 @@ public class OrderFragment extends Fragment {
 
         categoryMealAdapter = new CategoryMealAdapter(getActivity());
         categoryMealAdapter.loadSteps(App.getCategoriesMeals());
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context,2);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context, 2);
         rvwStepsList.setLayoutManager(layoutManager);
         rvwStepsList.setAdapter(categoryMealAdapter);
 
         btnOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if(!isFirstPage){
-                   vwsOrder.showPrevious();
-                   isFirstPage = true;
-               }
+                if (!isFirstPage) {
+                    vwsOrder.showPrevious();
+                    isFirstPage = true;
+                }
             }
         });
 
         btnBill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isFirstPage){
+                if (isFirstPage) {
                     showOrdres();
                     vwsOrder.showNext();
                     isFirstPage = false;
@@ -123,31 +129,43 @@ public class OrderFragment extends Fragment {
         return view;
     }
 
-    public void buildOrders(){
+    public void buildOrders() {
         orders = new HashMap<>();
         CategoriesMeals categoriesMeals = App.getCategoriesMeals();
-        for(CategoryMeal categoryMeal : categoriesMeals){
-            Log.e(Constants.TAG_LOG,"CategoryMeal:"+ categoryMeal.getName());
+        for (CategoryMeal categoryMeal : categoriesMeals) {
+            Log.e(Constants.TAG_LOG, "CategoryMeal:" + categoryMeal.getName());
             int idStep = categoryMeal.getIdCategoryMeal();
             Meals meals = new Meals();
-            orders.put(idStep,meals);
+            orders.put(idStep, meals);
         }
     }
 
     @SuppressLint("NewApi")
-    private void showOrdres(){
+    public void showOrdres() {
         //Log.e(Constants.TAG_LOG,"showOrdres()");
         lltOrder.removeAllViews();
-        CategoriesMeals categoriesMeals = App.getCategoriesMeals();
-        for(CategoryMeal categoryMeal : categoriesMeals){
+       categoriesMeals = App.getCategoriesMeals();
+        for (CategoryMeal categoryMeal : categoriesMeals) {
             //Log.e(Constants.TAG_LOG,categoryMeal.getIdStep()+": "+categoryMeal.getName());
-            View view = LayoutInflater.from(context).inflate(R.layout.item_step_orders,null,false);
-            TextView txtOrderName = view.findViewById(R.id.txtOrderName);
-            RecyclerView rvwOrderList = view.findViewById(R.id.rvwOrderList);
-
+            View view = LayoutInflater.from(context).inflate(R.layout.item_step_orders, null,
+                    false);
+            txtOrderName = view.findViewById(R.id.txtOrderName);
+            imgAddMeal = view.findViewById(R.id.imgAddMeal);
+            rvwOrderList = view.findViewById(R.id.rvwOrderList);
+           txtNbGuest = view.findViewById(R.id.txtNbGuest);
+            txtNbMeal = view.findViewById(R.id.txtNbMeal);
             txtOrderName.setText(categoryMeal.getName());
+            imgAddMeal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HomeActivity home = (HomeActivity) context;
+                    home.showMealsDialog(categoryMeal.getIdCategoryMeal());
 
-            OrderAdapter orderAdapter = new OrderAdapter(getActivity());
+                }
+            });
+            txtNbMeal.setText("" + "/");
+            txtNbGuest.setText("" + guests);
+            orderAdapter = new OrderAdapter(getActivity());
             orderAdapter.loadMeals(orders.get(categoryMeal.getIdCategoryMeal()));
             LinearLayoutManager llm = new LinearLayoutManager(getActivity());
             llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -159,13 +177,18 @@ public class OrderFragment extends Fragment {
 
     }
 
-    public void addOrders(int idStep, Meals list){
+
+    public int getGuests() {
+        return guests;
+    }
+
+    public void addOrders(int idStep, Meals list) {
         orders.get(idStep).clear();
-        for(Meal meal: list){
+        for (Meal meal : list) {
             int end = meal.getQuantity();
             meal.setQuantity(1);
-            for(int i = 0; i<end;i++){
-               orders.get(idStep).add(meal);
+            for (int i = 0; i < end; i++) {
+                orders.get(idStep).add(meal);
             }
             meal.setQuantity(0);
         }

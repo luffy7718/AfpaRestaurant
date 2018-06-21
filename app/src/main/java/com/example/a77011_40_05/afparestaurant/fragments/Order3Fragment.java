@@ -28,7 +28,7 @@ public class Order3Fragment extends Fragment {
 
     Context context;
     int idTable;
-    int guests;
+    public int guests;
     CategoryMealAdapter categoryMealAdapter;
     OrderAdapter orderAdapter;
     Meals orders;
@@ -99,6 +99,10 @@ public class Order3Fragment extends Fragment {
         rvwOrderList.setAdapter(orderAdapter);
 
         return view;
+    }
+
+    public int getGuests() {
+        return guests;
     }
 
     public void addOrders(int idStep, Meals list){

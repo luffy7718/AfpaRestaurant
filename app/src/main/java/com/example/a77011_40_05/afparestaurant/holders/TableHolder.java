@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.activities.HomeActivity;
+import com.example.a77011_40_05.afparestaurant.fragments.MealsDialogFragment;
 import com.example.a77011_40_05.afparestaurant.models.Table;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
 import com.example.a77011_40_05.afparestaurant.utils.Functions;
@@ -48,6 +49,7 @@ public class TableHolder extends RecyclerView.ViewHolder {
         cvTableBody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 selectGuests(activity);
             }
         });

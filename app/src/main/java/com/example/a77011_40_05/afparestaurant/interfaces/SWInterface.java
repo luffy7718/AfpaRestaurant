@@ -15,6 +15,14 @@ public interface SWInterface {
      * CALL
      ******************************************/
     @FormUrlEncoded
+    @POST("/afpa_restaurant/addMealsOrder.php")
+    Call<Push> addMealsOrder(
+            @Header("Authorization") String authorization,
+            @Field("idTable") int idTable,
+            @Field("idStaff") int idStaff,
+            @Field("date") String date,
+            @Field("done") int done);
+    @FormUrlEncoded
     @POST("/afpa_restaurant/forceLogin.php")//forceLogin.php ou login.php
     Call<Push> login(
             @Header("Authorization") String authorization,

@@ -12,12 +12,11 @@ public class Constants {
     public static final int FRAG_ORDER = 2;
     public static final int FRAG_ORDER2 = 3;
     public static final int FRAG_ORDER3 = 4;
-
     public static final int FRAG_SETTINGS = 100;
 
 
     public static final String APP_NAME = "AfpaRestaurant";
-    //public static final String URL_WEBSERVICE =  "http://10.75.25.69:8080/afpa_restaurant/";
-    public static final String URL_WEBSERVICE =  "http://10.75.25.69:8080/test_restaurant/";
+    //public static final String URL_WEBSERVICE =  "http://10.75.25.101:8080/afpa_restaurant/";
+    public static final String URL_WEBSERVICE =  "http://10.75.25.101:8080/afpa_restaurant/";
     //public static final String URL_WEBSERVICE =  "https://afpa-restaurant.000webhostapp.com";
 }

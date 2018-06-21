@@ -17,6 +17,7 @@ import com.example.a77011_40_05.afparestaurant.adapters.TableAdapter;
 import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
 import com.example.a77011_40_05.afparestaurant.models.Push;
 import com.example.a77011_40_05.afparestaurant.models.Tables;
+import com.example.a77011_40_05.afparestaurant.utils.App;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
 import com.example.a77011_40_05.afparestaurant.utils.Functions;
 import com.example.a77011_40_05.afparestaurant.utils.RetrofitApi;
@@ -82,6 +83,7 @@ public class TablesSelectorFragment extends Fragment {
                     if(push.getStatus()==1) {
                         Gson gson = new Gson();
                         Tables tables = gson.fromJson(push.getData(),Tables.class);
+                        App.setTables(tables);
                         tableAdapter.loadTables(tables);
                         Log.e(Constants.TAG_LOG,"DATA RECIEVE");
                     }

@@ -48,6 +48,7 @@ public class Meal {
     }
 
     public int getQuantity() {
+
         return quantity;
     }
 

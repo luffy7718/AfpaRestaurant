@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
@@ -11,7 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a77011_40_05.afparestaurant.R;
+import com.example.a77011_40_05.afparestaurant.adapters.MealAdapter;
 import com.example.a77011_40_05.afparestaurant.models.Meal;
+import com.example.a77011_40_05.afparestaurant.models.Meals;
+import com.example.a77011_40_05.afparestaurant.utils.Constants;
 
 public class MealHolder extends RecyclerView.ViewHolder {
 
@@ -23,6 +27,9 @@ public class MealHolder extends RecyclerView.ViewHolder {
     private ImageButton removeQuantity;
     private NumberPicker npQuantity;
     private Meal meal;
+    MealAdapter parent;
+    private int min = 0;
+    private int max = 20;
 
     public MealHolder(View view) {
         super(view);
@@ -37,38 +44,38 @@ public class MealHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void setMeal(Meal meal, Activity activity) {
+    public void setMeal(Meal meal, MealAdapter parent) {
         this.meal = meal;
-
+        this.parent = parent;
         txtMeal.setText(meal.getName());
+
         if (!v2) {
             txtQuantity.setText("" + meal.getQuantity());
 
             addQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    meal.addQuantity();
-                    txtQuantity.setText("" + meal.getQuantity());
+                    addQuantity();
                 }
             });
 
             removeQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    meal.removeQuantity();
-                    txtQuantity.setText("" + meal.getQuantity());
+                    removeQuantity();
                 }
             });
         } else {
-            npQuantity.setMinValue(0);
-            npQuantity.setMaxValue(20);
-            npQuantity.setWrapSelectorWheel(false);
+            npQuantity.setMinValue(min);
+            npQuantity.setMaxValue(max);
             npQuantity.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                 @Override
                 public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                     meal.setQuantity(newVal);
+
                 }
             });
+
         }
 
     }
@@ -77,4 +84,16 @@ public class MealHolder extends RecyclerView.ViewHolder {
         Toast.makeText(activity, "SELECT: " + meal.getName(), Toast.LENGTH_SHORT).show();
 
     }
+
+    public void addQuantity() {
+        meal.addQuantity();
+        txtQuantity.setText("" + meal.getQuantity());
+    }
+
+    public void removeQuantity() {
+        meal.removeQuantity();
+        txtQuantity.setText("" + meal.getQuantity());
+    }
+
+
 }

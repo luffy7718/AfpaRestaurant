@@ -32,7 +32,7 @@ import java.util.HashMap;
  */
 public class Order2Fragment extends Fragment {
 
-    int guests;
+   public int guests;
     int idTable;
     int idOrder;
     HashMap<Integer,Meals> orders;
@@ -53,7 +53,7 @@ public class Order2Fragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Commandes");
+        getActivity().setTitle("Commande");
         if (getArguments() != null) {
             if(getArguments().containsKey("guests") && getArguments().containsKey("idTable")){
                 guests = getArguments().getInt("guests");
@@ -121,6 +121,10 @@ public class Order2Fragment extends Fragment {
 
             lltOrder.addView(view);
         }
+    }
+
+    public int getGuests() {
+        return guests;
     }
 
     public void addOrders(int idStep, Meals list){
