@@ -5,73 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".fragments.OrderFragment">
 
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/lltOrder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnOrders"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Commande" />
-
-            <Button
-                android:id="@+id/btnBill"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Facture" />
-        </LinearLayout>
-
-        <ViewSwitcher
-            android:id="@+id/vwsOrder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rvwStepsList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:id="@+id/lltOrder"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"/>
-                </ScrollView>
-            </LinearLayout>
-
-
-        </ViewSwitcher>
-
-
-    </LinearLayout>
-
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 </FrameLayout>

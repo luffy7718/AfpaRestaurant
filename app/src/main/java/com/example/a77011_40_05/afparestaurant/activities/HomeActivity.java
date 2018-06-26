@@ -8,10 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -25,11 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a77011_40_05.afparestaurant.R;
-import com.example.a77011_40_05.afparestaurant.fragments.HomeFragment;
 import com.example.a77011_40_05.afparestaurant.fragments.MealsDialogFragment;
-import com.example.a77011_40_05.afparestaurant.fragments.Order2Fragment;
-import com.example.a77011_40_05.afparestaurant.fragments.Order3Fragment;
 import com.example.a77011_40_05.afparestaurant.fragments.OrderFragment;
+import com.example.a77011_40_05.afparestaurant.fragments.Order3Fragment;
+import com.example.a77011_40_05.afparestaurant.fragments.Order4Fragment;
 import com.example.a77011_40_05.afparestaurant.fragments.SettingsFragment;
 import com.example.a77011_40_05.afparestaurant.fragments.TablesSelectorFragment;
 import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
@@ -53,7 +49,7 @@ public class HomeActivity extends AppCompatActivity
     TextView txtHeaderName;
     ImageView imgProfilePics;
     SWInterface swInterface;
-
+    int backStackCount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +98,10 @@ public class HomeActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-            int backStackCount = fragmentManager.getBackStackEntryCount();
+            backStackCount = fragmentManager.getBackStackEntryCount();
+
+            Log.e("OnBackPressed", String.valueOf(backStackCount));
+
             if (backStackCount == 0) {
                 showDisconnectAppliDialog();
             }
@@ -125,7 +124,7 @@ public class HomeActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            changeFragment(Constants.FRAG_SETTINGS, null);
+
             return true;
         } else if (id == R.id.action_login) {
             showDisconnectDialog();
@@ -173,12 +172,6 @@ public class HomeActivity extends AppCompatActivity
             case Constants.FRAG_ORDER:
                 frag = OrderFragment.newInstance(params);
                 break;
-            case Constants.FRAG_ORDER2:
-                frag = Order2Fragment.newInstance(params);
-                break;
-            case Constants.FRAG_ORDER3:
-                frag = Order3Fragment.newInstance(params);
-                break;
             case Constants.FRAG_SETTINGS:
                 frag = new SettingsFragment();
                 break;
@@ -211,11 +204,11 @@ public class HomeActivity extends AppCompatActivity
         int guests = 0;
         switch (mode) {
             case "Menu et Commandes":
-                OrderFragment order = (OrderFragment) frag;
+                Order4Fragment order = (Order4Fragment) frag;
                 guests = order.getGuests();
                 break;
             case "Liste papier":
-                Order2Fragment order2 = (Order2Fragment) frag;
+                OrderFragment order2 = (OrderFragment) frag;
                 guests = order2.getGuests();
                 break;
             case "Claude":
@@ -224,7 +217,7 @@ public class HomeActivity extends AppCompatActivity
                 break;
             default:
                 Log.e(Constants.TAG_LOG, "WARNING: Default case");
-                OrderFragment orderDefault = (OrderFragment) frag;
+                Order4Fragment orderDefault = (Order4Fragment) frag;
                 guests = orderDefault.getGuests();
                 break;
         }

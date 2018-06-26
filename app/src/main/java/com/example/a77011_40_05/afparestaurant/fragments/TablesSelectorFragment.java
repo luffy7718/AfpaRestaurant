@@ -99,4 +99,11 @@ public class TablesSelectorFragment extends Fragment {
         });
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(Constants.TAG_LOG,"onResume()");
+        getTables();
+    }
 }

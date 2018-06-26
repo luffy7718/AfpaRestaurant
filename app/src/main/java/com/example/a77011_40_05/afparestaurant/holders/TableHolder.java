@@ -1,7 +1,6 @@
 package com.example.a77011_40_05.afparestaurant.holders;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.activities.HomeActivity;
-import com.example.a77011_40_05.afparestaurant.fragments.MealsDialogFragment;
 import com.example.a77011_40_05.afparestaurant.models.Table;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
 import com.example.a77011_40_05.afparestaurant.utils.Functions;
@@ -40,17 +38,23 @@ public class TableHolder extends RecyclerView.ViewHolder {
 
         if(table.getIdOrder() != 0){
             cvTableBody.setCardBackgroundColor(activity.getResources().getColor(R.color.tableOccupied));
-            cvTableBody.setEnabled(false);
+            //cvTableBody.setEnabled(false);
         }else{
             cvTableBody.setCardBackgroundColor(activity.getResources().getColor(R.color.tableFree));
-            cvTableBody.setEnabled(true);
+            //cvTableBody.setEnabled(true);
         }
 
         cvTableBody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                selectGuests(activity);
+                if(table.getIdOrder() != 0){
+                    HomeActivity home = (HomeActivity) activity;
+                    Bundle args = new Bundle();
+                    args.putInt("idOrder",table.getIdOrder());
+                    home.changeFragment(Constants.FRAG_ORDER,args);
+                }else{
+                    selectGuests(activity);
+                }
             }
         });
     }
@@ -69,23 +73,7 @@ public class TableHolder extends RecyclerView.ViewHolder {
                     if(nbGuests != 0){
                         args.putInt("guests",nbGuests);
                         args.putInt("idTable",table.getIdTable());
-                        String mode = Functions.getPreferenceString(activity,"commandMode");
-                        switch (mode){
-                            case "Menu et Commandes":
-                                home.changeFragment(Constants.FRAG_ORDER,args);
-                                break;
-                            case "Liste papier":
-                                home.changeFragment(Constants.FRAG_ORDER2,args);
-                                break;
-                            case "Claude":
-                                home.changeFragment(Constants.FRAG_ORDER3,args);
-                                break;
-                            default:
-                                Log.e(Constants.TAG_LOG, "WARNING: Default case");
-                                home.changeFragment(Constants.FRAG_ORDER,args);
-                                break;
-                        }
-
+                        home.changeFragment(Constants.FRAG_ORDER,args);
                     }else{
                         Toast.makeText(activity,"Au moins 1 convive nécéssaire.",Toast.LENGTH_LONG).show();
                     }

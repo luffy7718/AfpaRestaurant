@@ -13,15 +13,11 @@ import android.widget.LinearLayout;
 
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.adapters.CategoryMealAdapter;
-import com.example.a77011_40_05.afparestaurant.adapters.OrderAdapter;
-import com.example.a77011_40_05.afparestaurant.models.CategoriesMeals;
-import com.example.a77011_40_05.afparestaurant.models.CategoryMeal;
+import com.example.a77011_40_05.afparestaurant.adapters.OrderItemAdapter;
 import com.example.a77011_40_05.afparestaurant.models.Meal;
 import com.example.a77011_40_05.afparestaurant.models.Meals;
 import com.example.a77011_40_05.afparestaurant.utils.App;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
-
-import java.util.HashMap;
 
 
 public class Order3Fragment extends Fragment {
@@ -30,7 +26,7 @@ public class Order3Fragment extends Fragment {
     int idTable;
     public int guests;
     CategoryMealAdapter categoryMealAdapter;
-    OrderAdapter orderAdapter;
+    OrderItemAdapter orderItemAdapter;
     Meals orders;
 
     //ELEMENTS
@@ -91,12 +87,12 @@ public class Order3Fragment extends Fragment {
         rvwStepsList.setAdapter(categoryMealAdapter);
 
 
-        orderAdapter = new OrderAdapter(getActivity());
-        orderAdapter.loadMeals(orders);
+        orderItemAdapter = new OrderItemAdapter(getActivity());
+        //orderItemAdapter.loadMeals(orders);
         LinearLayoutManager llmv = new LinearLayoutManager(getActivity());
         llmv.setOrientation(LinearLayoutManager.VERTICAL);
         rvwOrderList.setLayoutManager(llmv);
-        rvwOrderList.setAdapter(orderAdapter);
+        rvwOrderList.setAdapter(orderItemAdapter);
 
         return view;
     }
@@ -106,15 +102,15 @@ public class Order3Fragment extends Fragment {
     }
 
     public void addOrders(int idStep, Meals list){
-        Meals listApdapter = orderAdapter.getMeals();
+        //Meals listApdapter = orderItemAdapter.getOrdersItems();
         for(Meal meal: list){
             int end = meal.getQuantity();
             meal.setQuantity(1);
             for(int i = 0; i<end;i++){
-                listApdapter.add(meal);
+                //listApdapter.add(meal);
             }
             meal.setQuantity(0);
         }
-        orderAdapter.notifyDataSetChanged();
+        orderItemAdapter.notifyDataSetChanged();
     }
 }

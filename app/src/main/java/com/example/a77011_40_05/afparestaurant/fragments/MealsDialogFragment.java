@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,16 +20,15 @@ import android.widget.ViewSwitcher;
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.activities.HomeActivity;
 import com.example.a77011_40_05.afparestaurant.adapters.MealAdapter;
-import com.example.a77011_40_05.afparestaurant.adapters.OrderAdapter;
+import com.example.a77011_40_05.afparestaurant.adapters.OrderItemAdapter;
+import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
 import com.example.a77011_40_05.afparestaurant.models.Meal;
 import com.example.a77011_40_05.afparestaurant.models.Meals;
 import com.example.a77011_40_05.afparestaurant.models.CategoryMeal;
 import com.example.a77011_40_05.afparestaurant.models.CategoriesMeals;
-import com.example.a77011_40_05.afparestaurant.models.Table;
-import com.example.a77011_40_05.afparestaurant.models.Tables;
 import com.example.a77011_40_05.afparestaurant.utils.App;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
-import com.example.a77011_40_05.afparestaurant.utils.Functions;
+import com.example.a77011_40_05.afparestaurant.utils.RetrofitApi;
 
 public class MealsDialogFragment extends DialogFragment {
 
@@ -47,7 +44,11 @@ public class MealsDialogFragment extends DialogFragment {
     TextView txtNbGuest;
     public int guests;
     int idTable;
-    OrderAdapter orderAdapter;
+    OrderItemAdapter orderItemAdapter;
+    SWInterface swInterface;
+    Meal mealBdd;
+    Order4Fragment order4Fragment;
+    CategoriesMeals categoriesMeals;
 
     public MealsDialogFragment() {
         // Required empty public constructor
@@ -65,6 +66,9 @@ public class MealsDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        swInterface = RetrofitApi.getInterface();
+
+        // order4Fragment.idOrder;
         if (getArguments() != null) {
 
             if (getArguments().containsKey("idCategoryMeal")) {
@@ -76,6 +80,7 @@ public class MealsDialogFragment extends DialogFragment {
             if (idCategoryMeal != 0) {
                 Log.e(Constants.TAG_LOG, "CategoriesMeals: " + idCategoryMeal);
             }
+
 
             if (getArguments().containsKey("guests")) {
                 guests = getArguments().getInt("guests");
@@ -90,6 +95,7 @@ public class MealsDialogFragment extends DialogFragment {
 
         }
         context = getActivity();
+
     }
 
     @Override
@@ -118,29 +124,10 @@ public class MealsDialogFragment extends DialogFragment {
 
         btnValide.setOnClickListener(v -> {
             HomeActivity home = (HomeActivity) getActivity();
-            String mode = Functions.getPreferenceString(context, "commandMode");
-
-            switch (mode) {
-                case "Menu et Commandes":
-                    OrderFragment frag = (OrderFragment) home.getLastFragment();
-                    frag.addOrders(idCategoryMeal, meals);
-                    frag.showOrdres();
-                    break;
-                case "Liste papier":
-                    Order2Fragment frag2 = (Order2Fragment) home.getLastFragment();
-                    frag2.addOrders(idCategoryMeal, meals);
-                    break;
-                case "Claude":
-                    Order3Fragment frag3 = (Order3Fragment) home.getLastFragment();
-                    frag3.addOrders(idCategoryMeal, meals);
-                    break;
-                default:
-                    Log.e(Constants.TAG_LOG, "WARNING: Default case");
-                    OrderFragment fragDefault = (OrderFragment) home.getLastFragment();
-                    fragDefault.addOrders(idCategoryMeal, meals);
-                    break;
-            }
+            OrderFragment frag = (OrderFragment) home.getLastFragment();
+            frag.addOrders(idCategoryMeal, meals);
             getDialog().dismiss();
+
         });
 
         mealAdapter = new MealAdapter(getActivity());
@@ -150,7 +137,7 @@ public class MealsDialogFragment extends DialogFragment {
         rvwMealsList.setAdapter(mealAdapter);
 
         getMeals();
-        orderAdapter = new OrderAdapter(getActivity());
+        orderItemAdapter = new OrderItemAdapter(getActivity());
 
         return view;
     }
@@ -175,20 +162,24 @@ public class MealsDialogFragment extends DialogFragment {
     }
 
     private void getMeals() {
-        Log.e(Constants.TAG_LOG, "getMeals for " + idCategoryMeal);
-        Meals meals = App.getMeals();
+        Log.e(Constants.TAG_LOG, "getOrdersItems for " + idCategoryMeal);
+        meals = App.getMeals();
         Meals newList = new Meals();
         for (Meal meal : meals) {
             if (meal.getIdCategoryMeal() == idCategoryMeal) {
-                Log.e(Constants.TAG_LOG, "Plat: " + meal.getName());
+                Log.e(Constants.TAG_LOG, "Plat: " + meal.getName() + "" + meal.getIdMeal());
                 newList.add(meal);
+                App.setMeal(meal);
+
             }
         }
         mealAdapter.loadMeals(newList);
+
+
     }
 
     private String getStepName() {
-        CategoriesMeals categoriesMeals = App.getCategoriesMeals();
+        categoriesMeals = App.getCategoriesMeals();
         for (CategoryMeal categoryMeal : categoriesMeals) {
             if (categoryMeal.getIdCategoryMeal() == idCategoryMeal) {
                 return categoryMeal.getName();
@@ -204,6 +195,7 @@ public class MealsDialogFragment extends DialogFragment {
         for (Meal meal : mealAdapter.getMeals()) {
             if (meal.getQuantity() > 0) {
                 meals.add(meal);
+
                 LinearLayout llt = new LinearLayout(context);
                 llt.setOrientation(LinearLayout.HORIZONTAL);
                 llt.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams
@@ -222,4 +214,7 @@ public class MealsDialogFragment extends DialogFragment {
             }
         }
     }
+
+
+
 }

@@ -13,9 +13,19 @@ import android.widget.Toast;
 
 import com.example.a77011_40_05.afparestaurant.R;
 import com.example.a77011_40_05.afparestaurant.adapters.MealAdapter;
+import com.example.a77011_40_05.afparestaurant.interfaces.SWInterface;
 import com.example.a77011_40_05.afparestaurant.models.Meal;
 import com.example.a77011_40_05.afparestaurant.models.Meals;
+import com.example.a77011_40_05.afparestaurant.models.Push;
+import com.example.a77011_40_05.afparestaurant.utils.App;
 import com.example.a77011_40_05.afparestaurant.utils.Constants;
+import com.example.a77011_40_05.afparestaurant.utils.Functions;
+import com.example.a77011_40_05.afparestaurant.utils.RetrofitApi;
+import com.example.a77011_40_05.afparestaurant.utils.Session;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MealHolder extends RecyclerView.ViewHolder {
 
@@ -23,7 +33,6 @@ public class MealHolder extends RecyclerView.ViewHolder {
     private CardView cvMealsBody;
     private TextView txtMeal;
     private TextView txtQuantity;
-    private ImageButton addQuantity;
     private ImageButton removeQuantity;
     private NumberPicker npQuantity;
     private Meal meal;
@@ -31,16 +40,18 @@ public class MealHolder extends RecyclerView.ViewHolder {
     private int min = 0;
     private int max = 20;
 
+
     public MealHolder(View view) {
         super(view);
+
         cvMealsBody = view.findViewById(R.id.cvMealsBody);
         txtMeal = view.findViewById(R.id.txtMeal);
         if (v2) {
             npQuantity = view.findViewById(R.id.npQuantity);
         } else {
             txtQuantity = view.findViewById(R.id.txtQuantity);
-            addQuantity = view.findViewById(R.id.addQuantity);
             removeQuantity = view.findViewById(R.id.removeQuantity);
+
         }
     }
 
@@ -48,16 +59,16 @@ public class MealHolder extends RecyclerView.ViewHolder {
         this.meal = meal;
         this.parent = parent;
         txtMeal.setText(meal.getName());
-
+        App.setMeal(meal);
         if (!v2) {
             txtQuantity.setText("" + meal.getQuantity());
 
-            addQuantity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addQuantity();
-                }
-            });
+           cvMealsBody.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   addQuantity();
+               }
+           });
 
             removeQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,6 +105,9 @@ public class MealHolder extends RecyclerView.ViewHolder {
         meal.removeQuantity();
         txtQuantity.setText("" + meal.getQuantity());
     }
+
+
+
 
 
 }

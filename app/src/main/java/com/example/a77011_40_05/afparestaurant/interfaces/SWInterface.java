@@ -14,14 +14,7 @@ public interface SWInterface {
     /******************************************
      * CALL
      ******************************************/
-    @FormUrlEncoded
-    @POST("/afpa_restaurant/addMealsOrder.php")
-    Call<Push> addMealsOrder(
-            @Header("Authorization") String authorization,
-            @Field("idTable") int idTable,
-            @Field("idStaff") int idStaff,
-            @Field("date") String date,
-            @Field("done") int done);
+
     @FormUrlEncoded
     @POST("/afpa_restaurant/forceLogin.php")//forceLogin.php ou login.php
     Call<Push> login(
@@ -52,6 +45,43 @@ public interface SWInterface {
     @POST("getTables.php")
     Call<Push> getTables(
             @Header("Authorization") String authorization);
+
+
+    @FormUrlEncoded
+    @POST("addOrder.php")
+    Call<Push> addOrder(
+            @Header("Authorization") String authorization,
+            @Field("idTable") int idTable,
+            @Field("idStaff") int idStaff,
+            @Field("guests") int guests,
+            @Field("date") String date,
+            @Field("done") int done);
+
+    @FormUrlEncoded
+    @POST("orderCompleted.php")
+    Call<Push> orderCompleted(
+            @Header("Authorization") String authorization,
+            @Field("idOrder") int idOrder,
+            @Field("done") int done);
+
+    @FormUrlEncoded
+    @POST("addOrderItem.php")
+    Call<Push> addOrderItem(
+            @Header("Authorization") String authorization,
+            @Field("idOrder") int idOrder,
+            @Field("idMeal") int idMeal);
+
+    @FormUrlEncoded
+    @POST("removeOrderItem.php")
+    Call<Push> removeOrderItem(
+            @Header("Authorization") String authorization,
+            @Field("idOrderItem") int idOrderItem);
+
+    @FormUrlEncoded
+    @POST("getOrder.php")
+    Call<Push> getOrder(
+            @Header("Authorization") String authorization,
+            @Field("idOrder") int idOrder);
 
     /******************************************
      * OBSERVABLE

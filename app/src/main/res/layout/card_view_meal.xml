@@ -32,7 +32,8 @@
                 <TextView
                     android:id="@+id/txtMeal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:layout_marginLeft="25dp"
                     android:layout_marginVertical="25dp"
                     android:text="Plat"
@@ -44,31 +45,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/addQuantity"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_up_arrow" />
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/txtQuantity"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:layout_weight="1"
                     android:inputType="number"
                     android:text="0"
-                    android:textAlignment="center"
                     android:textSize="25sp" />
-
                 <ImageButton
                     android:id="@+id/removeQuantity"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_down_arrow" />
+                    android:background="#0FFF"
+                    android:src="@drawable/ic_action_remove" />
+
+
 
 
             </LinearLayout>

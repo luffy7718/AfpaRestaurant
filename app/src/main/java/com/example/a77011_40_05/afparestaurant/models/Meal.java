@@ -8,7 +8,16 @@ public class Meal {
     int idCategoryMeal;
     int quantity = 0;
 
+
+
     public Meal() {
+    }
+
+    public Meal(Meal meal){
+        this.idMeal = meal.getIdMeal();
+        this.name = meal.getName();
+        this.description = meal.getDescription();
+        this.idCategoryMeal = meal.getIdCategoryMeal();
     }
 
     public int getIdMeal() {
@@ -52,12 +61,12 @@ public class Meal {
         return quantity;
     }
 
-    public void addQuantity(){
-        this.quantity ++;
+    public void addQuantity() {
+        this.quantity++;
     }
 
-    public void removeQuantity(){
-        if(this.quantity > 0) {
+    public void removeQuantity() {
+        if (this.quantity > 0) {
             this.quantity--;
         }
     }
