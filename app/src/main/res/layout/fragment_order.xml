@@ -5,15 +5,35 @@
     android:layout_height="match_parent"
     tools:context=".fragments.OrderFragment">
 
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/lltOrder"
+        <Button
+            android:id="@+id/btncompleted"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="#FFF"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="5dp"
+            android:text="Terminé la commande" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/lltOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+    </LinearLayout>
+
+
 </FrameLayout>

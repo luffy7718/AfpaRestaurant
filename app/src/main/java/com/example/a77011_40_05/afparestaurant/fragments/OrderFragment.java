@@ -101,6 +101,15 @@ public class OrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order, container, false);
         lltOrder = view.findViewById(R.id.lltOrder);
+        btncompleted = view.findViewById(R.id.btncompleted);
+        btncompleted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                orderCompleted(1);
+                HomeActivity home = (HomeActivity) getActivity();
+                home.changeFragment(Constants.FRAG_HOME, null);
+            }
+        });
 
         showOrdres();
         return view;
@@ -148,15 +157,6 @@ public class OrderFragment extends Fragment {
             RecyclerView rvwOrderList = view.findViewById(R.id.rvwOrderList);
             txtNbGuest = view.findViewById(R.id.txtNbGuest);
             txtNbMeal = view.findViewById(R.id.txtNbMeal);
-            btncompleted = view.findViewById(R.id.btncompleted);
-            btncompleted.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    orderCompleted(1);
-                    HomeActivity home = (HomeActivity) getActivity();
-                    home.changeFragment(Constants.FRAG_HOME, null);
-                }
-            });
             txtOrderName.setText(categoryMeal.getName());
             lltHeaderOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
