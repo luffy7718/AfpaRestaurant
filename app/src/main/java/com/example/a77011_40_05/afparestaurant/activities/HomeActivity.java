@@ -61,10 +61,6 @@ public class HomeActivity extends AppCompatActivity
         context = this;
         swInterface = RetrofitApi.getInterface();
 
-        if (Functions.getPreferenceString(this, "commandMode").equals("")) {
-            Functions.addPreferenceString(this, "commandMode", "Menu et Commandes");
-        }
-
         fragmentManager = getFragmentManager();
         changeFragment(Constants.FRAG_TABLES_SELECTOR, null);
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -200,27 +196,9 @@ public class HomeActivity extends AppCompatActivity
     public void showMealsDialog(int idCategoryMeal) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment frag = getLastFragment();
-        String mode = Functions.getPreferenceString(this, "commandMode");
         int guests = 0;
-        switch (mode) {
-            case "Menu et Commandes":
-                Order4Fragment order = (Order4Fragment) frag;
-                guests = order.getGuests();
-                break;
-            case "Liste papier":
-                OrderFragment order2 = (OrderFragment) frag;
-                guests = order2.getGuests();
-                break;
-            case "Claude":
-                Order3Fragment order3 = (Order3Fragment) frag;
-                guests = order3.getGuests();
-                break;
-            default:
-                Log.e(Constants.TAG_LOG, "WARNING: Default case");
-                Order4Fragment orderDefault = (Order4Fragment) frag;
-                guests = orderDefault.getGuests();
-                break;
-        }
+        OrderFragment order = (OrderFragment) frag;
+        guests = order.getGuests();
         Bundle bundle = new Bundle();
         bundle.putInt("idCategoryMeal", idCategoryMeal);
         bundle.putInt("guests", guests);
